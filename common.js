@@ -50,6 +50,7 @@ function $$(ele) {
 function getStyle(obj, attr) {//标签,属性
   return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj, false)[attr];
 }
+
 //设置元素样式
 function setStyle(dom, css) {
   for (var key in css) {
@@ -244,4 +245,38 @@ let constantize = (obj) => {
       constantize(obj[key]);
     }
   })
+}
+
+// 节流函数
+/**
+ * 
+ * @param { Function } fn 需要节流的函数 
+ * @param { Number } delay 节流时间，默认500ms
+ * @returns 
+ */
+function throttle(fn, delay = 500) {
+  let time = Date.now()
+  return function () {
+    if (Date.now() - time > delay) {
+      time = Date.now()
+      fn.call(this, ...arguments)
+    }
+  }
+}
+
+// 防抖函数
+/**
+ * 
+ * @param { Function } fn 需要防抖的函数 
+ * @param { Number } delay 防抖时间，默认500ms
+ * @returns 
+ */
+function debounce(fn, delay = 500) {
+  let timer = null
+  return function () {
+    timer && clearTimeout(timer)
+    timer = setTimeout(() => {
+      fn.call(this, ...arguments) // this指向调用者
+    }, delay)
+  }
 }
